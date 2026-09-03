@@ -10,7 +10,7 @@ export default function LandingPage() {
           <h2>My Video Call</h2>
         </div>
         <div className='navlist'>
-          <p>Jion as Guest</p>
+          <p>Join as Guest</p>
           <p>Register</p>
           <div role='button'>
             <p>Login</p>
