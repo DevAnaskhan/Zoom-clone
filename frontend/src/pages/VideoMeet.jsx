@@ -4,7 +4,7 @@ import { Badge, IconButton, TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
-import styles from "../styles/videoComponent.module.css";
+import styles from "../styles/VideoComponent.module.css"
 import CallEndIcon from '@mui/icons-material/CallEnd'
 import MicIcon from '@mui/icons-material/Mic'
 import MicOffIcon from '@mui/icons-material/MicOff'
@@ -58,13 +58,10 @@ export default function VideoMeetComponent() {
 
     let [videos, setVideos] = useState([])
 
-    // TODO
-    // if(isChrome() === false) {
 
-
-    // }
 
     useEffect(() => {
+        console.log("HELLO")
         getPermissions();
 
     })
@@ -128,7 +125,7 @@ export default function VideoMeetComponent() {
         }
 
 
-    }, [audio])
+    }, [video, audio])
 
     let getMedia = () => {
         setVideo(videoAvailable);
@@ -290,14 +287,14 @@ export default function VideoMeetComponent() {
                 clients.forEach((socketListId) => {
 
                     connections[socketListId] = new RTCPeerConnection(peerConfigConnections)
-                    // Wait for their ice candidate       
+                       
                     connections[socketListId].onicecandidate = function (event) {
                         if (event.candidate != null) {
                             socketRef.current.emit('signal', socketListId, JSON.stringify({ 'ice': event.candidate }))
                         }
                     }
 
-                    // Wait for their video stream
+                   
                     connections[socketListId].onaddstream = (event) => {
                         console.log("BEFORE:", videoRef.current);
                         console.log("FINDING ID: ", socketListId);
@@ -307,7 +304,6 @@ export default function VideoMeetComponent() {
                         if (videoExists) {
                             console.log("FOUND EXISTING");
 
-                            // Update the stream of the existing video
                             setVideos(videos => {
                                 const updatedVideos = videos.map(video =>
                                     video.socketId === socketListId ? { ...video, stream: event.stream } : video
@@ -316,7 +312,7 @@ export default function VideoMeetComponent() {
                                 return updatedVideos;
                             });
                         } else {
-                            // Create a new video
+                           
                             console.log("CREATING NEW");
                             let newVideo = {
                                 socketId: socketListId,
@@ -381,14 +377,8 @@ export default function VideoMeetComponent() {
     }
 
     let handleVideo = () => {
-        const nextVideoState = !video;
-        const videoTrack = window.localStream?.getVideoTracks()[0];
-
-        if (videoTrack) {
-            videoTrack.enabled = nextVideoState;
-        }
-
-        setVideo(nextVideoState);
+       setVideo(!video);
+       
     }
     let handleAudio = () => {
         setAudio(!audio)
